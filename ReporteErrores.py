@@ -1,9 +1,9 @@
 import os
-texto = ""
+cadena = ""
 
 def ComienzoReporte():
-    global texto
-    texto += """<!doctype html>
+    global cadena
+    cadena += """<!doctype html>
     <html lang="en">
         <head>
             <meta charset="utf-8">
@@ -17,42 +17,42 @@ def ComienzoReporte():
                 <h1><center>Reporte de Errores</center></h1>
             </div>"""
 
-def TablaErrores(Error):
-    global texto
-    texto += """<table class="table table-dark table-hover table-bordered">
+def TablaErrores(Fallo):
+    global cadena
+    cadena += """<table class="table table-dark table-hover table-bordered">
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Lexema</th>
-            <th scope="col">Tipo</th>
+            <th scope="col">Tipo de Error</th>
+            <th scope="col">Caracter(es)</th>
+            <th scope="col">Linea</th>
             <th scope="col">Columna</th>
-            <th scope="col">Fila</th>
         </tr>
     </thead>
     <tbody>"""
-    contador = 1
-    for error in Error:
-        texto += """
+    conteo = 1
+    for fallo in Fallo:
+        cadena += """
         <tr class="table-danger">
-            <th scope="row">""" + str(contador) + """</th>
-            <th>""" + str(error.lexema) + """</th>
-            <th>""" + str(error.tipo) + """</th>
-            <th>""" + str(error.columna) + """</th>
-            <th>""" + str(error.fila) + """</th>
+            <th scope="row">""" + str(conteo) + """</th>
+            <th>""" + str(fallo.tipo) + " Lexico" + """</th>
+            <th>""" + str(fallo.lexema) + """</th>
+            <th>""" + str(fallo.linea) + """</th>
+            <th>""" + str(fallo.columna) + """</th>
         </tr>
         """
-        contador +=1
-    texto += """</tbody>
+        conteo +=1
+    cadena += """</tbody>
     </table>"""
 
 def CreacionDelArchivo():
-    global texto
+    global cadena
     archivo=open('Errores_201902278.html','w', encoding='utf-8')
-    archivo.write(texto)
+    archivo.write(cadena)
     archivo.close()
     os.startfile("Errores_201902278.html")
 
-def GenerarArchivoDeErrores(Error):
+def GenerarArchivoDeErrores(Fallo):
     ComienzoReporte()
-    TablaErrores(Error)
+    TablaErrores(Fallo)
     CreacionDelArchivo()

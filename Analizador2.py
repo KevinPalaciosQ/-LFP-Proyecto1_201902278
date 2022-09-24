@@ -10,17 +10,13 @@ class Analizador:
     def __init__(self):
         self.ListaTokens=[]
         self.ListaErrores=[]
-    def ascii(self,caracter):
-        for i in range(32,256):
-                if i!=60 and 61 and 62:
-                    if chr(i)==caracter:
-                        return True
+
     #Método para reconocer decimales
     def AutomataFinitoDecimal(self, caracter):
-        EstadoAceptacion = [2]
+        Estado_aceptacion = [2]
         MiEstado = 0
         for abc in caracter:
-            if MiEstado == 0:
+            if MiEstado ==0:
                 if abc.isdigit():
                     MiEstado = 1
                 else:
@@ -39,67 +35,66 @@ class Analizador:
                     MiEstado = -1
             elif MiEstado ==-1:
                 return False
-        return MiEstado in EstadoAceptacion
-    def AnalisisLexico(self, parametro):
+        return MiEstado in Estado_aceptacion
+
+    def AnalisisLexico(self, dato):
         self.ListaTokens = []
         self.ListaErrores = []
         contador = 0
         linea = 1
         columna = 1
         lector = ""#buffer
-        estado="A"#ESTADO INICIAL PARA PALABRAS RESERVADAS
-        while contador<len(parametro):
-            abc=parametro[contador]
-            #INICIO ESTADO A-------TOKENS
-            if estado == "A":
+        estado="S0"#ESTADO INICIAL PARA PALABRAS RESERVADAS
+        while contador<len(dato):
+            abc=dato[contador]
+            #INICIO ESTADO S0-------TOKENS
+            if estado == "S0":
                 if (abc == "<"):
                     lector=abc
                     columna+=1
                     self.ListaTokens.append(Token(lector,"menor","<",linea,columna))
                     lector=""
-                    estado="A"
+                    estado="S0"
                 elif (abc==">"):
                     lector=abc
                     columna+=1
                     self.ListaTokens.append(Token(lector,"mayor",">",linea,columna))
                     lector=""
-                    estado="A"
+                    estado="S0"
                 elif (abc=="="):
                     lector=abc
                     columna+=1
                     self.ListaTokens.append(Token(lector,"igual","=",linea,columna))
                     lector=""
-                    estado="A"
+                    estado="S0"
                 elif (abc=="/"):
                     lector=abc
                     columna+=1
                     self.ListaTokens.append(Token(lector,"diagonal","/",linea,columna))
                     lector=""
-                    estado="A"
+                    estado="S0"
                 elif (abc == "["):
                     lector=abc
                     columna+=1
                     self.ListaTokens.append(Token(lector,"corcheteabre","[",linea,columna))
                     lector=""
-                    estado="A"
+                    estado="S0"
                 elif (abc == "]"):
                     lector=abc
                     columna+=1
                     self.ListaTokens.append(Token(lector,"corchetecierra","]",linea,columna))
                     lector=""
-                    estado="A"
+                    estado="S0"
+                
                 elif (abc.isalpha()) and (not abc.isdigit()):#ISALPHA ENCUENTRA PALABRA Y ALMACENA
                     lector=abc
                     columna+=1
-                    estado="B"
+                    estado="S1"
                 elif (abc.isdigit()):#ISDIGIT ENCUENTRA DIGITOS Y ALMACENA
                     lector=abc
                     columna+=1
-                    estado="C"
-                elif abc == '"':#SE TOMA EL COMENTARIO COMO UNA CADENA
-                    lector=abc
-                    columna+=1
-                    estado="D"
+                    estado="S2"
+            
                 elif abc == '\n':
                     columna = 1
                     linea +=1
@@ -111,83 +106,188 @@ class Analizador:
                     self.ListaErrores.append(Error(lector,"Error",linea,columna))
                     lector=""
                     columna+=1
-            #INICIO ESTADO B
-            elif estado == "B" :#PUEDEN VENIR LETRAS Y NUMEROS
+            #INICIO ESTADO S1
+            elif estado == "S1" :#PUEDEN VENIR LETRAS Y NUMEROS
                 if (abc.isalpha()) or (abc in ListaAscii) and (not abc.isdigit()):
                     lector+=abc
                     columna+=1
-                    estado="B"
+                    estado="S1"
                 else:
                     if (lector in ListaDeColores):
                         self.ListaTokens.append(Token(lector,"RColores","colores",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "Tipo"):
                         self.ListaTokens.append(Token(lector,"RTipo","Tipo",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "Operacion"):
                         self.ListaTokens.append(Token(lector,"ROperacion","Operacion",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "SUMA"):
                         self.ListaTokens.append(Token(lector,"RSUMA","Suma",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "RESTA"):
                         self.ListaTokens.append(Token(lector,"RRESTA","Resta",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "MULTIPLICACION"):
                         self.ListaTokens.append(Token(lector,"RMULTIPLICACION","Multiplicacion",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "DIVISION"):
                         self.ListaTokens.append(Token(lector,"RDIVISION","Division",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "POTENCIA"):
                         self.ListaTokens.append(Token(lector,"RPOTENCIA","Potencia",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "RAIZ"):
                         self.ListaTokens.append(Token(lector,"RRAIZ","Raiz",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "INVERSO"):
                         self.ListaTokens.append(Token(lector,"RINVERSO","Inverso",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "SENO"):
-                        self.ListaTokens.append(Token(lector,"RSENO","Seno",linea,columna))  
+                        self.ListaTokens.append(Token(lector,"RSENO","Seno",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1  
                     elif (lector == "COSENO"):
-                        self.ListaTokens.append(Token(lector,"RCOSENO","Coseno",linea,columna))   
+                        self.ListaTokens.append(Token(lector,"RCOSENO","Coseno",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1   
                     elif (lector == "TANGENTE"):
                         self.ListaTokens.append(Token(lector,"RTANGENTE","Tangente",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "MOD"):
-                        self.ListaTokens.append(Token(lector,"RMOD","Mod",linea,columna))     
+                        self.ListaTokens.append(Token(lector,"RMOD","Mod",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1     
                     elif (lector == "Numero"):
                         self.ListaTokens.append(Token(lector,"RNumero","Numero",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "Texto"):
                         self.ListaTokens.append(Token(lector,"RTexto","Texto",linea,columna))
-                    elif (lector == "Funcion "):
+                        lector=""
+                        if self.ListaTokens[len(self.ListaTokens) - 2].token == "menor" and abc == ">":
+                            self.ListaTokens.append(Token(abc,"mayor",">",linea,columna))
+                            contador += 1
+                            estado = "S3" 
+                        else:
+                            lector=""
+                            estado="S0"
+                            contador-=1
+                        
+                    elif (lector == "Funcion"):
                         self.ListaTokens.append(Token(lector,"RFuncion ","Funcion",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "ESCRIBIR"):
                         self.ListaTokens.append(Token(lector,"RESCRIBIR ","Escribir",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
                     elif (lector == "Titulo"):
                         self.ListaTokens.append(Token(lector,"RTitulo","Titulo",linea,columna))
+                        lector=""
+                        if self.ListaTokens[len(self.ListaTokens) - 2].token == "menor" and abc == ">":
+                            self.ListaTokens.append(Token(abc,"mayor",">",linea,columna))
+                            contador += 1
+                            estado = "S3" 
+                        else:
+                            lector=""
+                            estado="S0"
+                            contador-=1
                     elif (lector == "Operaciones"):
                         self.ListaTokens.append(Token(lector,"ROperaciones","Operaciones",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
+
                     elif (lector == "Descripcion"):
                         self.ListaTokens.append(Token(lector,"RDescripcion","Descripcion",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
+
                     elif (lector == "TEXTO"):
                         self.ListaTokens.append(Token(lector,"RTEXTO","Texto",linea,columna))
-                    elif (lector == "Contenido"):
-                        self.ListaTokens.append(Token(lector,"RContenido","Contenido",linea,columna)) 
+                        lector=""
+                        estado="S0"
+                        contador-=1
+
                     elif (lector == "TIPO"):
-                        self.ListaTokens.append(Token(lector,"RTIPO","Tipo",linea,columna))  
+                        self.ListaTokens.append(Token(lector,"RTIPO","Tipo",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1  
+
                     elif (lector == "Estilo"):
-                        self.ListaTokens.append(Token(lector,"REstilo","Estilo",linea,columna)) 
-                    elif (lector == "Titulo Color"):
-                        self.ListaTokens.append(Token(lector,"RTituloColor","TituloColor",linea,columna)) 
+                        self.ListaTokens.append(Token(lector,"REstilo","Estilo",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1 
+
+                    elif (lector == "Color"):
+                        self.ListaTokens.append(Token(lector,"RColor","Color",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
+
                     elif (lector == "Tamanio"):
                         self.ListaTokens.append(Token(lector,"RTamanio","Tamanio",linea,columna))
-                    elif (lector == "Descripcion Color"):
-                        self.ListaTokens.append(Token(lector,"RDescripcionColor","DescripcionColor",linea,columna))
-                    elif (lector == "Contenido Color"):
-                        self.ListaTokens.append(Token(lector,"RContenidoColor","ContenidoColor",linea,columna))
-                    lector=""
-                    estado="A"
-                    contador-=1
-            elif estado == "C":#numeros
+                        lector=""
+                        estado="S0"
+                        contador-=1
+
+                    elif (lector == "Descripcion"):
+                        self.ListaTokens.append(Token(lector,"RDescripcion","Descripcion",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
+
+                    elif (lector == "Contenido"):
+                        self.ListaTokens.append(Token(lector,"RContenido","Contenido",linea,columna))
+                        lector=""
+                        estado="S0"
+                        contador-=1
+                    else:
+                        self.ListaErrores.append(Error(lector,"Error",linea,columna))
+                        lector=""
+                        columna+=1
+            #INICIO ESTADO S2     
+            elif estado == "S2":#Numeros
                 if abc.isdigit():
                     lector+=abc
                     columna+=1
-                    estado="C"
+                    estado="S2"
                 elif abc == ".":
                     lector+=abc
                     columna+=1
-                    estado="C"
+                    estado="S2"
                 else:
                     if self.AutomataFinitoDecimal(abc):
                         self.ListaTokens.append(Token(lector,"Double","\d\d*\.\d\d*",linea,columna))
@@ -195,22 +295,26 @@ class Analizador:
                         self.ListaTokens.append(Token(lector,"Entero","\d\d*",linea,columna))
                     lector = ""
                     contador -= 1
-                    estado = "A"
-                    #EN UN NUEVO ESTADO TOMAR TOKENS CON [] Y TEXTO CON []
-            elif estado == "D" :
-                if abc == '"':
-                    lector+=abc
-                    columna+=1
-                    self.ListaTokens.append(Token(lector,"Comentario","texto",linea,columna))
-                    lector=""
-                    estado = "A"
-                elif abc == '\n':
+                    estado = "S0"
+            #INICIO ESTADO S3
+            elif estado == "S3":#Textos entre abrebiaturas
+                if abc != "<":
+                    lector += abc
+                    columna += 1
+                    estado = "S3"
+
+                elif abc == "\n":
+                    lector += abc
+                    linea += 1
                     columna = 1
-                    linea +=1
+                    estado = "S3"
+
                 else:
-                    lector+=abc
-                    columna+=1
-                    estado="D"
+                    self.ListaTokens.append(Token(lector, "cadena", ".[^<]", linea, columna))
+                    lector = ""
+                    estado = "S0"
+                    contador -= 1
+
             contador+=1
     def impresion(self):
         print("TOKENS: ")

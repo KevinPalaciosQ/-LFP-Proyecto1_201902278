@@ -1,9 +1,8 @@
 import os
-texto = ""
-
+cadena = ""
 def ComienzoReporte():
-    global texto
-    texto += """<!doctype html>
+    global cadena
+    cadena += """<!doctype html>
     <html lang="en">
         <head>
             <meta charset="utf-8">
@@ -16,10 +15,9 @@ def ComienzoReporte():
             <div class="p-3 mb-2 text-white" style="background-color:#c51212">
                 <h1><center>Reporte de Tokens</center></h1>
             </div>"""
-
-def TablaErrores(Error):
-    global texto
-    texto += """<table class="table table-dark table-hover table-bordered">
+def TablaTokens(Tokn):
+    global cadena
+    cadena += """<table class="table table-dark table-hover table-bordered">
     <thead>
         <tr>
             <th scope="col">#</th>
@@ -32,29 +30,29 @@ def TablaErrores(Error):
     </thead>
     <tbody>"""
     contador = 1
-    for error in Error:
-        texto += """
-        <tr class="table-danger">
+    for tokn in Tokn:
+        cadena += """
+        <tr class="table-success">
             <th scope="row">""" + str(contador) + """</th>
-            <th>""" + str(error.lexema) + """</th>
-            <th>""" + str(error.token) + """</th>
-            <th>""" + str(error.patron) + """</th>
-            <th>""" + str(error.linea) + """</th>
-            <th>""" + str(error.columna) + """</th>
+            <th>""" + str(tokn.lexema) + """</th>
+            <th>""" + str(tokn.token) + """</th>
+            <th>""" + str(tokn.patron) + """</th>
+            <th>""" + str(tokn.linea) + """</th>
+            <th>""" + str(tokn.columna) + """</th>
         </tr>
         """
         contador +=1
-    texto += """</tbody>
+    cadena += """</tbody>
     </table>"""
 
 def CreacionDelArchivo():
-    global texto
-    archivo=open('Errores_201902278.html','w', encoding='utf-8')
-    archivo.write(texto)
+    global cadena
+    archivo=open('Tokens_201902278.html','w', encoding='utf-8')
+    archivo.write(cadena)
     archivo.close()
-    os.startfile("Errores_201902278.html")
+    os.startfile("Tokens_201902278.html")
 
-def GenerarArchivoDeTokens(Error):
+def GenerarArchivoDeTokens(Tokn):
     ComienzoReporte()
-    TablaErrores(Error)
+    TablaTokens(Tokn)
     CreacionDelArchivo()

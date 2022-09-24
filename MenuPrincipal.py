@@ -11,7 +11,7 @@ from Error import Error
 from ReporteErrores import *
 from ReporteTokens import *
 ventanaprincipal = None
-global textbox
+textbox = ""
 global RutaArchivo
 material = ""
 hola = ""
@@ -49,25 +49,31 @@ def GuardarComo():
             ruta.close()
             messagebox.showinfo("Succes","Se Guardo el Archivo")
     except:
-            messagebox.showwarning("Advertencia","No se pudo guardar el Archivo")
+        messagebox.showwarning("Advertencia","No se pudo guardar el Archivo")
 def Analizadorr():
-    global material
+    global textbox
     global hola
-    hola=Analizador()
-    hola.AnalisisLexico(material)
-    hola.impresion()
+    try:
+        hola=Analizador()
+        hola.AnalisisLexico(textbox.get(1.0, END))
+        hola.impresion()
+        messagebox.showinfo("Succes","Se Analizó el Archivo")
+    except:
+        messagebox.showwarning("Advertencia","No se pudo Analizar el Archivo")
 def Errores():
     global hola
-    global material
-    hola=Analizador()
-    hola.AnalisisLexico(material)
-    GenerarArchivoDeErrores(hola.ListaErrores)
+    try:
+        GenerarArchivoDeErrores(hola.ListaErrores)
+        messagebox.showinfo("Succes","Se Generó el Reporte de Errores")
+    except:
+        messagebox.showwarning("Advertencia","No se pudo Generar el Reporte de Errores, por favor analice el Archivo")
 def Tokens():
     global hola
-    global material
-    hola=Analizador()
-    hola.AnalisisLexico(material)
-    GenerarArchivoDeTokens(hola.ListaTokens)
+    try:
+        GenerarArchivoDeTokens(hola.ListaTokens)
+        messagebox.showinfo("Succes","Se Generó el Reporte de Tokens")
+    except:
+        messagebox.showwarning("Advertencia","No se pudo Generar el Reporte de Tokens, por favor analice el Archivo")
 def Abrir():
     ObtenerRuta()
 def Salir():
@@ -130,7 +136,7 @@ def VentanaPrincipal():
     #ETIQUETAS
     lblentrada = Label(ventanaprincipal,text="Entrada:",font="Cambria 22", fg="SteelBlue4", bg="light cyan")
     lblentrada.place(x=100,y=-5)
-    lblsalida = Label(ventanaprincipal,text="Salida:",font="Cambria 22", fg="SteelBlue4", bg="light cyan")
+    lblsalida = Label(ventanaprincipal,text="Resultado Operaciones:",font="Cambria 22", fg="SteelBlue4", bg="light cyan")
     lblsalida.place(x=550,y=-5)
     #TEXTBOX
     textbox = Text(ventanaprincipal, width=50, height=40,bg="floral white")
