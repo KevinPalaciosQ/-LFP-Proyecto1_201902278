@@ -6,15 +6,17 @@ import tkinter as ttk
 from tkinter import filedialog
 from tkinter import messagebox 
 import webbrowser as wb
-from Token import Token
-from Error import Error
+from Token import *
+from Error import *
 from ReporteErrores import *
 from ReporteTokens import *
+from ReporteOperaciones import*
 ventanaprincipal = None
 textbox = ""
 global RutaArchivo
 material = ""
 hola = ""
+ListaOperaciones=[]
 from Analizador2 import *
 def ObtenerRuta():
     global textbox
@@ -57,9 +59,17 @@ def Analizadorr():
         hola=Analizador()
         hola.AnalisisLexico(textbox.get(1.0, END))
         hola.impresion()
+        hola.BuscarOperaciones()
         messagebox.showinfo("Succes","Se Analizó el Archivo")
     except:
         messagebox.showwarning("Advertencia","No se pudo Analizar el Archivo")
+def Resultados():
+    global hola
+    try:
+        GenerarArchivoDeOperaciones(hola.ListaOperaciones)
+        messagebox.showinfo("Succes","Se Generó el Reporte de Resultados")
+    except:
+        messagebox.showwarning("Advertencia","No se pudo Generar el Reporte de Resultados, por favor analice el Archivo")
 def Errores():
     global hola
     try:
@@ -108,9 +118,9 @@ def VentanaPrincipal():
     global ventanaprincipal
     global textbox
     ventanaprincipal = tkinter.Tk()
-    ventanaprincipal.title("")
-    ventanaprincipal.geometry("1000x700")
-    ventanaprincipal.config(bg="light cyan")
+    ventanaprincipal.title("Anális Léxico")
+    ventanaprincipal.geometry("600x700")
+    ventanaprincipal.config(bg="SlateGray3")
     ventanaprincipal.resizable(0,0)
     #MENU
     menubar = Menu(ventanaprincipal)
@@ -125,6 +135,7 @@ def VentanaPrincipal():
     file_menu.add_command(label="Analizar", command=Analizadorr)
     file_menu.add_command(label="Reporte de Errores",command=Errores)
     file_menu.add_command(label="Reporte de Tokens",command=Tokens)
+    file_menu.add_command(label="Reporte de Resultados",command=Resultados)
     file_menu.add_command(label="Salir",command=ventanaprincipal.destroy)
     #ITEMS DEL MENU AYUDA
     help_menu.add_command(label="Manual de Usuario", command=ManualDeUsuario)
@@ -134,14 +145,10 @@ def VentanaPrincipal():
     menubar.add_cascade(label="Menú",menu=file_menu)
     menubar.add_cascade(label="?",menu=help_menu)
     #ETIQUETAS
-    lblentrada = Label(ventanaprincipal,text="Entrada:",font="Cambria 22", fg="SteelBlue4", bg="light cyan")
+    lblentrada = Label(ventanaprincipal,text="Entrada:",font="Cambria 22", fg="gray17", bg="SlateGray3")
     lblentrada.place(x=100,y=-5)
-    lblsalida = Label(ventanaprincipal,text="Resultado Operaciones:",font="Cambria 22", fg="SteelBlue4", bg="light cyan")
-    lblsalida.place(x=550,y=-5)
     #TEXTBOX
-    textbox = Text(ventanaprincipal, width=50, height=40,bg="floral white")
+    textbox = Text(ventanaprincipal, width=50, height=40,bg="lavender")
     textbox.place(x=100,y=30)
-    textboxsalida = Text(ventanaprincipal, width=50, height=40,bg="light steel blue")
-    textboxsalida.place(x=550,y=30)
     ventanaprincipal.mainloop()
 VentanaPrincipal()

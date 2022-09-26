@@ -12,7 +12,7 @@ def ComienzoReporte():
             <title>Reporte de Tokens</title>
         </head>
         <body>
-            <div class="p-3 mb-2 text-white" style="background-color:#c51212">
+            <div class="p-3 mb-2 text-white" style="background-color:#63e526">
                 <h1><center>Reporte de Tokens</center></h1>
             </div>"""
 def TablaTokens(Tokn):
@@ -23,7 +23,7 @@ def TablaTokens(Tokn):
             <th scope="col">#</th>
             <th scope="col">Lexema</th>
             <th scope="col">Tipo</th>
-            <th scope="col">Patrón</th>
+            <th scope="col">Simbología</th>
             <th scope="col">Fila</th>
             <th scope="col">Columna</th>
         </tr>
@@ -47,10 +47,10 @@ def TablaTokens(Tokn):
 
 def CreacionDelArchivo():
     global cadena
-    archivo=open('Tokens_201902278.html','w', encoding='utf-8')
+    archivo=open("Reporte_Tokens_201902278.html","w", encoding="utf-8")
     archivo.write(cadena)
     archivo.close()
-    os.startfile("Tokens_201902278.html")
+    os.startfile("Reporte_Tokens_201902278.html")
 
 def GenerarArchivoDeTokens(Tokn):
     ComienzoReporte()

@@ -13,5 +13,5 @@ class Token:
         print("Linea: "+str(self.linea))
         print("Columna: "+str(self.columna))
         print("\n***********************************")
-    
+
 
